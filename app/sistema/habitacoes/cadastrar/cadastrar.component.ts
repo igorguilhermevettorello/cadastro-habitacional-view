@@ -532,8 +532,8 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
       .subscribe((response) => {
         let res = response.json();
         this.habitacoes = res.habitacoes;
-        this.habitacoes.nascimento_1 = this.date_format(this.habitacoes.nascimento_1);
-        this.habitacoes.nascimento_2 = this.date_format(this.habitacoes.nascimento_2);
+        this.habitacoes.nascimento_1 = (this.habitacoes.nascimento_1) ? this.date_format(this.habitacoes.nascimento_1) : this.habitacoes.nascimento_1;
+        this.habitacoes.nascimento_2 = (this.habitacoes.nascimento_2) ? this.date_format(this.habitacoes.nascimento_2) : this.habitacoes.nascimento_2;
         this.habitacoes.renda_1 = this.number_format(this.habitacoes.renda_1, 2, ',', '.');
         this.habitacoes.renda_2 = this.number_format(this.habitacoes.renda_2, 2, ',', '.');
         this.habitacoes.bolsa_familia_valor_1 = this.number_format(this.habitacoes.bolsa_familia_valor_1, 2, ',', '.');
@@ -568,7 +568,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     this.grupoFamiliar = [];
     this.grupoFamiliar = composicao_familiar;
     this.grupoFamiliar.map((item, index) => {
-      item.dt_nascimento = this.date_format(item.dt_nascimento);
+      item.dt_nascimento = (item.dt_nascimento) ? this.date_format(item.dt_nascimento) : item.dt_nascimento;
       item.renda = this.number_format(item.renda, 2, ',', '.');
       item.bolsa_familia_valor = this.number_format(item.bolsa_familia_valor, 2, ',', '.');
       item.bpc_valor = this.number_format(item.bpc_valor, 2, ',', '.');

@@ -519,8 +519,8 @@ var HabitacoesCadastrarComponent = (function () {
             .subscribe(function (response) {
             var res = response.json();
             _this.habitacoes = res.habitacoes;
-            _this.habitacoes.nascimento_1 = _this.date_format(_this.habitacoes.nascimento_1);
-            _this.habitacoes.nascimento_2 = _this.date_format(_this.habitacoes.nascimento_2);
+            _this.habitacoes.nascimento_1 = (_this.habitacoes.nascimento_1) ? _this.date_format(_this.habitacoes.nascimento_1) : _this.habitacoes.nascimento_1;
+            _this.habitacoes.nascimento_2 = (_this.habitacoes.nascimento_2) ? _this.date_format(_this.habitacoes.nascimento_2) : _this.habitacoes.nascimento_2;
             _this.habitacoes.renda_1 = _this.number_format(_this.habitacoes.renda_1, 2, ',', '.');
             _this.habitacoes.renda_2 = _this.number_format(_this.habitacoes.renda_2, 2, ',', '.');
             _this.habitacoes.bolsa_familia_valor_1 = _this.number_format(_this.habitacoes.bolsa_familia_valor_1, 2, ',', '.');
@@ -556,7 +556,7 @@ var HabitacoesCadastrarComponent = (function () {
         this.grupoFamiliar = [];
         this.grupoFamiliar = composicao_familiar;
         this.grupoFamiliar.map(function (item, index) {
-            item.dt_nascimento = _this.date_format(item.dt_nascimento);
+            item.dt_nascimento = (item.dt_nascimento) ? _this.date_format(item.dt_nascimento) : item.dt_nascimento;
             item.renda = _this.number_format(item.renda, 2, ',', '.');
             item.bolsa_familia_valor = _this.number_format(item.bolsa_familia_valor, 2, ',', '.');
             item.bpc_valor = _this.number_format(item.bpc_valor, 2, ',', '.');
