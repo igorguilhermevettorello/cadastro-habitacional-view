@@ -379,8 +379,6 @@ var HabitacoesCadastrarComponent = (function () {
             this.habitacoes.telefones = this.telefones.map(function (item) { return item; }).join(" | ");
             this.familia = this.grupoFamiliar.map(function (item, index) {
                 if (!item.deleted) {
-                    item.dt_nascimento = $("#gf_dt_nascimento_" + index).val();
-                    item.renda = $("#gf_renda_" + index).val();
                     return item;
                 }
             });
@@ -442,6 +440,7 @@ var HabitacoesCadastrarComponent = (function () {
             habitacoes: this.habitacoes,
             composicao_familiar: this.familia
         };
+        console.log("save", dados);
         if (isNaN(this.id) || this.id === "") {
             var url = this.globals.url + '/habitacoes/habitacao';
             this.http.post(url, JSON.stringify(dados), { headers: headers })

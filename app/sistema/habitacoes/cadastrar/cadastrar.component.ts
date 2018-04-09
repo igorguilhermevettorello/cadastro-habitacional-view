@@ -398,8 +398,6 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
 
       this.familia = this.grupoFamiliar.map((item, index) => {
         if (!item.deleted) {
-          item.dt_nascimento = $(`#gf_dt_nascimento_${index}`).val();
-          item.renda = $(`#gf_renda_${index}`).val();
           return item;
         }
       });
@@ -462,6 +460,8 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
       habitacoes: this.habitacoes,
       composicao_familiar: this.familia
     }
+
+    console.log("save", dados);
 
     if (isNaN(this.id) || this.id === "") {
 
