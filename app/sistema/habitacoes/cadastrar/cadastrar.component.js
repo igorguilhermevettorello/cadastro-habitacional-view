@@ -98,6 +98,7 @@ var HabitacoesCadastrarComponent = (function () {
             comprovante_cpf_rg: { hasError: null, msg: null },
             comprovante_renda: { hasError: null, msg: null },
             comprovante_deficiencia_doenca_grave: { hasError: null, msg: null },
+            outras_rendas: { hasError: null, msg: null },
             observacao: { hasError: null, msg: null }
         };
         this.habitacoes = {
@@ -172,6 +173,7 @@ var HabitacoesCadastrarComponent = (function () {
             comprovante_cpf_rg: false,
             comprovante_renda: false,
             comprovante_deficiencia_doenca_grave: false,
+            outras_rendas: "",
             observacao: ""
         };
         this.composicaoFamiliar = {
@@ -195,6 +197,7 @@ var HabitacoesCadastrarComponent = (function () {
             renda: ""
         };
         this.escolaridades = [
+            { descricao: '' },
             { descricao: 'Fundamental - Incompleto' },
             { descricao: 'Fundamental - Completo' },
             { descricao: 'Médio - Incompleto' },
@@ -277,7 +280,8 @@ var HabitacoesCadastrarComponent = (function () {
             { id: "composicao_familiar_cpf", tipo: "cpf" },
             { id: "composicao_familiar_renda", tipo: "dinheiro" },
             { id: "composicao_familiar_bolsa_familia_valor", tipo: "dinheiro" },
-            { id: "composicao_familiar_bpc_valor", tipo: "dinheiro" }
+            { id: "composicao_familiar_bpc_valor", tipo: "dinheiro" },
+            { id: "outras_rendas", tipo: "dinheiro" }
         ];
     }
     HabitacoesCadastrarComponent.prototype.ngOnInit = function () {
@@ -376,6 +380,7 @@ var HabitacoesCadastrarComponent = (function () {
             this.habitacoes.bpc_valor_1 = $("#bpc_valor_1").val();
             this.habitacoes.bolsa_familia_valor_2 = $("#bolsa_familia_valor_2").val();
             this.habitacoes.bpc_valor_2 = $("#bpc_valor_2").val();
+            this.habitacoes.outras_rendas = $("#outras_rendas").val();
             this.habitacoes.telefones = this.telefones.map(function (item) { return item; }).join(" | ");
             this.familia = this.grupoFamiliar.map(function (item, index) {
                 if (!item.deleted) {
@@ -526,9 +531,32 @@ var HabitacoesCadastrarComponent = (function () {
             _this.habitacoes.bpc_valor_1 = _this.number_format(_this.habitacoes.bpc_valor_1, 2, ',', '.');
             _this.habitacoes.bolsa_familia_valor_2 = _this.number_format(_this.habitacoes.bolsa_familia_valor_2, 2, ',', '.');
             _this.habitacoes.bpc_valor_2 = _this.number_format(_this.habitacoes.bpc_valor_2, 2, ',', '.');
+            _this.habitacoes.outras_rendas = _this.number_format(_this.habitacoes.outras_rendas, 2, ',', '.');
             _this.telefones = _this.habitacoes.telefones.split(" | ");
             _this.setGrupoFamiliar(res.composicao_familiar);
-            console.log(_this.habitacoes);
+            var val1 = _this.habitacoes.renda_1 || "0,00";
+            var val2 = _this.habitacoes.renda_2 || "0,00";
+            var val3 = _this.habitacoes.outras_rendas || "0,00";
+            var val4 = _this.habitacoes.bolsa_familia_valor_1 || "0,00";
+            var val5 = _this.habitacoes.bolsa_familia_valor_2 || "0,00";
+            var val6 = _this.habitacoes.bpc_valor_1 || "0,00";
+            var val7 = _this.habitacoes.bpc_valor_2 || "0,00";
+            val1 = val1.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val2 = val2.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val3 = val3.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val4 = val4.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val5 = val5.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val6 = val6.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val7 = val7.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+            val1 = parseFloat(parseFloat(val1).toFixed(2));
+            val2 = parseFloat(parseFloat(val2).toFixed(2));
+            val3 = parseFloat(parseFloat(val3).toFixed(2));
+            val4 = parseFloat(parseFloat(val4).toFixed(2));
+            val5 = parseFloat(parseFloat(val5).toFixed(2));
+            val6 = parseFloat(parseFloat(val6).toFixed(2));
+            val7 = parseFloat(parseFloat(val7).toFixed(2));
+            var total = (val1 + val2 + val3 + val4 + val5 + val6 + val7);
+            _this.totalizador = _this.number_format(total, 2, ',', '.');
         }, function (error) {
             console.log('error', error);
             if (error.status == 0) {
@@ -578,28 +606,36 @@ var HabitacoesCadastrarComponent = (function () {
         event.preventDefault();
         this.mostrarFormulario = !this.mostrarFormulario;
         this.habilitarSave = !this.habilitarSave;
-        //    let familia: any = {
-        //      id: "",
-        //      nome_completo: "",
-        //      vinculo: "",
-        //      dt_nascimento: "",
-        //      cpf_rg_cn: "",
-        //      escolaridade: "",
-        //      atividade: "",
-        //      renda: "",
-        //      deleted: false
-        //    };
-        //
-        //    let index = this.grupoFamiliar.push(familia);
-        //    index = (index - 1);
-        //
-        //    this.verificarCampo(`gf_dt_nascimento_${index}`, `data`);
-        //    this.verificarCampo(`gf_renda_${index}`, `dinheiro`);
+        this.composicaoFamiliar = {
+            nome_completo: "",
+            vinculo: "",
+            dt_nascimento: "",
+            cpf: "",
+            rg: "",
+            escolaridade: "",
+            atividade: "",
+            pcd: false,
+            pcd_qual: "",
+            doenca_grave: false,
+            doenca_qual: "",
+            bolsa_familia: false,
+            bolsa_familia_valor: "",
+            bpc: false,
+            bpc_valor: "",
+            inscrito_cadastro_unico: false,
+            inscricao_cadastro_unico: "",
+            renda: ""
+        };
+        $("#composicao_familiar_dt_nascimento").val("");
+        $("#composicao_familiar_cpf").val("");
+        $("#composicao_familiar_bolsa_familia_valor").val("");
+        $("#composicao_familiar_bpc_valor").val("");
+        $("#composicao_familiar_renda").val("");
     };
     HabitacoesCadastrarComponent.prototype.addNewGrupoFamiliar = function (event) {
         event.preventDefault();
         var familia = {
-            id: "",
+            id: this.composicaoFamiliar.id,
             nome_completo: this.composicaoFamiliar.nome_completo,
             vinculo: this.composicaoFamiliar.vinculo,
             dt_nascimento: $("#composicao_familiar_dt_nascimento").val(),
@@ -674,6 +710,19 @@ var HabitacoesCadastrarComponent = (function () {
         else {
             this.deleteComposicaoFamiliar(gf.id, index);
         }
+    };
+    HabitacoesCadastrarComponent.prototype.alterItemGrupoFamiliar = function (event, gf, i) {
+        event.preventDefault();
+        this.mostrarFormulario = !this.mostrarFormulario;
+        this.habilitarSave = !this.habilitarSave;
+        this.composicaoFamiliar = gf;
+        $("#composicao_familiar_dt_nascimento").val(gf.dt_nascimento);
+        $("#composicao_familiar_cpf").val(gf.cpf);
+        $("#composicao_familiar_bolsa_familia_valor").val(this.number_format(gf.bolsa_familia_valor, 2, ',', '.'));
+        $("#composicao_familiar_bpc_valor").val(this.number_format(gf.bpc_valor, 2, ',', '.'));
+        $("#composicao_familiar_renda").val(this.number_format(gf.renda, 2, ',', '.'));
+        console.log("index", i);
+        this.grupoFamiliar.splice(i, 1);
     };
     HabitacoesCadastrarComponent.prototype.verificarCampo = function (id, opcao) {
         var _this = this;
@@ -819,11 +868,26 @@ var HabitacoesCadastrarComponent = (function () {
     HabitacoesCadastrarComponent.prototype.calcularTotalizador = function () {
         var val1 = $("#renda_1").val() || "0,00";
         var val2 = $("#renda_2").val() || "0,00";
+        var val3 = $("#outras_rendas").val() || "0,00";
+        var val4 = $("#bolsa_familia_valor_1").val() || "0,00";
+        var val5 = $("#bolsa_familia_valor_2").val() || "0,00";
+        var val6 = $("#bpc_valor_1").val() || "0,00";
+        var val7 = $("#bpc_valor_2").val() || "0,00";
         val1 = val1.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
         val2 = val2.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val3 = val3.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val4 = val4.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val5 = val5.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val6 = val6.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val7 = val7.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
         val1 = parseFloat(parseFloat(val1).toFixed(2));
         val2 = parseFloat(parseFloat(val2).toFixed(2));
-        var total = (val1 + val2);
+        val3 = parseFloat(parseFloat(val3).toFixed(2));
+        val4 = parseFloat(parseFloat(val4).toFixed(2));
+        val5 = parseFloat(parseFloat(val5).toFixed(2));
+        val6 = parseFloat(parseFloat(val6).toFixed(2));
+        val7 = parseFloat(parseFloat(val7).toFixed(2));
+        var total = (val1 + val2 + val3 + val4 + val5 + val6 + val7);
         this.totalizador = this.number_format(total, 2, ',', '.');
     };
     HabitacoesCadastrarComponent.prototype.limparForm = function (event) {
@@ -900,6 +964,7 @@ var HabitacoesCadastrarComponent = (function () {
             comprovante_cpf_rg: { hasError: null, msg: null },
             comprovante_renda: { hasError: null, msg: null },
             comprovante_deficiencia_doenca_grave: { hasError: null, msg: null },
+            outras_rendas: { hasError: null, msg: null },
             observacao: { hasError: null, msg: null }
         };
         this.habitacoes = {
@@ -974,6 +1039,7 @@ var HabitacoesCadastrarComponent = (function () {
             comprovante_cpf_rg: false,
             comprovante_renda: false,
             comprovante_deficiencia_doenca_grave: false,
+            outras_rendas: "",
             observacao: ""
         };
         this.grupoFamiliar = [];

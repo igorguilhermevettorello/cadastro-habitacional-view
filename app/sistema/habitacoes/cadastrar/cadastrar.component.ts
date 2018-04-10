@@ -96,6 +96,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     comprovante_cpf_rg: {hasError: null, msg: null},
     comprovante_renda: {hasError: null, msg: null},
     comprovante_deficiencia_doenca_grave: {hasError: null, msg: null},
+    outras_rendas: {hasError: null, msg: null},
     observacao: {hasError: null, msg: null}
   };
 
@@ -174,6 +175,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     comprovante_cpf_rg: false,
     comprovante_renda: false,
     comprovante_deficiencia_doenca_grave: false,
+    outras_rendas: "",
     observacao: ""
   };
 
@@ -199,6 +201,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
   };
 
   private escolaridades: Array<Object> = [
+    {descricao: ''},
     {descricao: 'Fundamental - Incompleto'},
     {descricao: 'Fundamental - Completo'},
     {descricao: 'Médio - Incompleto'},
@@ -287,7 +290,8 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     {id:"composicao_familiar_cpf", tipo:"cpf"},
     {id:"composicao_familiar_renda", tipo:"dinheiro"},
     {id:"composicao_familiar_bolsa_familia_valor", tipo:"dinheiro"},
-    {id:"composicao_familiar_bpc_valor", tipo:"dinheiro"}
+    {id:"composicao_familiar_bpc_valor", tipo:"dinheiro"},
+    {id:"outras_rendas", tipo:"dinheiro"}
   ];
 
   constructor(
@@ -394,6 +398,8 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
       this.habitacoes.bpc_valor_1 = $("#bpc_valor_1").val();
       this.habitacoes.bolsa_familia_valor_2 = $("#bolsa_familia_valor_2").val();
       this.habitacoes.bpc_valor_2 = $("#bpc_valor_2").val();
+      this.habitacoes.outras_rendas = $("#outras_rendas").val();
+
       this.habitacoes.telefones = this.telefones.map(item => item).join(` | `);
 
       this.familia = this.grupoFamiliar.map((item, index) => {
@@ -540,9 +546,38 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
         this.habitacoes.bpc_valor_1 = this.number_format(this.habitacoes.bpc_valor_1, 2, ',', '.');
         this.habitacoes.bolsa_familia_valor_2 = this.number_format(this.habitacoes.bolsa_familia_valor_2, 2, ',', '.');
         this.habitacoes.bpc_valor_2 = this.number_format(this.habitacoes.bpc_valor_2, 2, ',', '.');
+        this.habitacoes.outras_rendas = this.number_format(this.habitacoes.outras_rendas, 2, ',', '.');
         this.telefones = this.habitacoes.telefones.split(` | `);
         this.setGrupoFamiliar(res.composicao_familiar);
-        console.log(this.habitacoes);
+
+        let val1 = this.habitacoes.renda_1 || "0,00";
+        let val2 = this.habitacoes.renda_2 || "0,00";
+        let val3 = this.habitacoes.outras_rendas || "0,00";
+        let val4 = this.habitacoes.bolsa_familia_valor_1 || "0,00";
+        let val5 = this.habitacoes.bolsa_familia_valor_2 || "0,00";
+        let val6 = this.habitacoes.bpc_valor_1 || "0,00";
+        let val7 = this.habitacoes.bpc_valor_2 || "0,00";
+
+        val1 = val1.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val2 = val2.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val3 = val3.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val4 = val4.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val5 = val5.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val6 = val6.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+        val7 = val7.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+
+        val1 = parseFloat(parseFloat(val1).toFixed(2));
+        val2 = parseFloat(parseFloat(val2).toFixed(2));
+        val3 = parseFloat(parseFloat(val3).toFixed(2));
+        val4 = parseFloat(parseFloat(val4).toFixed(2));
+        val5 = parseFloat(parseFloat(val5).toFixed(2));
+        val6 = parseFloat(parseFloat(val6).toFixed(2));
+        val7 = parseFloat(parseFloat(val7).toFixed(2));
+
+        let total = (val1 + val2 + val3 + val4 + val5 + val6 + val7);
+
+        this.totalizador = this.number_format(total, 2, ',', '.');
+
       }, error =>  {
         console.log('error', error);
         if (error.status == 0) {
@@ -593,30 +628,40 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     event.preventDefault();
     this.mostrarFormulario = !this.mostrarFormulario;
     this.habilitarSave = !this.habilitarSave;
-//    let familia: any = {
-//      id: "",
-//      nome_completo: "",
-//      vinculo: "",
-//      dt_nascimento: "",
-//      cpf_rg_cn: "",
-//      escolaridade: "",
-//      atividade: "",
-//      renda: "",
-//      deleted: false
-//    };
-//
-//    let index = this.grupoFamiliar.push(familia);
-//    index = (index - 1);
-//
-//    this.verificarCampo(`gf_dt_nascimento_${index}`, `data`);
-//    this.verificarCampo(`gf_renda_${index}`, `dinheiro`);
+
+    this.composicaoFamiliar = {
+      nome_completo : "",
+      vinculo : "",
+      dt_nascimento : "",
+      cpf : "",
+      rg : "",
+      escolaridade : "",
+      atividade : "",
+      pcd : false,
+      pcd_qual : "",
+      doenca_grave : false,
+      doenca_qual : "",
+      bolsa_familia : false,
+      bolsa_familia_valor : "",
+      bpc : false,
+      bpc_valor : "",
+      inscrito_cadastro_unico : false,
+      inscricao_cadastro_unico : "",
+      renda : ""
+    };
+
+    $("#composicao_familiar_dt_nascimento").val("");
+    $("#composicao_familiar_cpf").val("");
+    $("#composicao_familiar_bolsa_familia_valor").val("");
+    $("#composicao_familiar_bpc_valor").val("");
+    $("#composicao_familiar_renda").val("");
   }
 
   public addNewGrupoFamiliar(event) {
     event.preventDefault();
 
     let familia: any = {
-      id: "",
+      id: this.composicaoFamiliar.id,
       nome_completo : this.composicaoFamiliar.nome_completo,
       vinculo : this.composicaoFamiliar.vinculo,
       dt_nascimento : $("#composicao_familiar_dt_nascimento").val(),
@@ -688,6 +733,20 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
     } else {
       this.deleteComposicaoFamiliar(gf.id, index);
     }
+  }
+
+  public alterItemGrupoFamiliar(event, gf, i) {
+    event.preventDefault();
+    this.mostrarFormulario = !this.mostrarFormulario;
+    this.habilitarSave = !this.habilitarSave;
+    this.composicaoFamiliar = gf;
+    $("#composicao_familiar_dt_nascimento").val(gf.dt_nascimento);
+    $("#composicao_familiar_cpf").val(gf.cpf);
+    $("#composicao_familiar_bolsa_familia_valor").val(this.number_format(gf.bolsa_familia_valor, 2, ',', '.'));
+    $("#composicao_familiar_bpc_valor").val(this.number_format(gf.bpc_valor, 2, ',', '.'));
+    $("#composicao_familiar_renda").val(this.number_format(gf.renda, 2, ',', '.'));
+    console.log("index", i);
+    this.grupoFamiliar.splice(i, 1);
   }
 
   public verificarCampo(id, opcao) {
@@ -853,11 +912,30 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
   public calcularTotalizador() {
     let val1 = $("#renda_1").val() || "0,00";
     let val2 = $("#renda_2").val() || "0,00";
+    let val3 = $("#outras_rendas").val() || "0,00";
+    let val4 = $("#bolsa_familia_valor_1").val() || "0,00";
+    let val5 = $("#bolsa_familia_valor_2").val() || "0,00";
+    let val6 = $("#bpc_valor_1").val() || "0,00";
+    let val7 = $("#bpc_valor_2").val() || "0,00";
+
     val1 = val1.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
     val2 = val2.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+    val3 = val3.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+    val4 = val4.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+    val5 = val5.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+    val6 = val6.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+    val7 = val7.replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(".", "").replace(",", ".");
+
     val1 = parseFloat(parseFloat(val1).toFixed(2));
     val2 = parseFloat(parseFloat(val2).toFixed(2));
-    let total = (val1 + val2);
+    val3 = parseFloat(parseFloat(val3).toFixed(2));
+    val4 = parseFloat(parseFloat(val4).toFixed(2));
+    val5 = parseFloat(parseFloat(val5).toFixed(2));
+    val6 = parseFloat(parseFloat(val6).toFixed(2));
+    val7 = parseFloat(parseFloat(val7).toFixed(2));
+
+    let total = (val1 + val2 + val3 + val4 + val5 + val6 + val7);
+
     this.totalizador = this.number_format(total, 2, ',', '.');
   }
 
@@ -937,6 +1015,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
       comprovante_cpf_rg: {hasError: null, msg: null},
       comprovante_renda: {hasError: null, msg: null},
       comprovante_deficiencia_doenca_grave: {hasError: null, msg: null},
+      outras_rendas: {hasError: null, msg: null},
       observacao: {hasError: null, msg: null}
     };
 
@@ -1012,6 +1091,7 @@ export class HabitacoesCadastrarComponent implements OnInit, AfterViewInit {
       comprovante_cpf_rg: false,
       comprovante_renda: false,
       comprovante_deficiencia_doenca_grave: false,
+      outras_rendas: "",
       observacao: ""
     };
 

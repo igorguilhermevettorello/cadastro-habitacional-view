@@ -231,6 +231,22 @@
 
                     <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
                       <div>
+                        <div class="input-group espacamento {{hasError.empresa_1.hasError}}">
+                          <span class="input-group-addon">Empresa</span>
+                          <input
+                            type="text"
+                            name="empresa_1"
+                            [(ngModel)]="habitacoes.empresa_1"
+                            (focus)="limparCampos('empresa_1')"
+                            class="form-control input-sm"
+                            autocomplete="off">
+                        </div>
+                        <p class="text-danger">{{hasError.empresa_1.msg}}</p>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
+                      <div>
                         <div class="input-group espacamento {{hasError.renda_1.hasError}}">
                           <span class="input-group-addon">Renda</span>
                           <input
@@ -246,20 +262,24 @@
                         <p class="text-danger">{{hasError.renda_1.msg}}</p>
                       </div>
                     </div>
+                  </div>
 
+                  <div class="row">
+                    <div class="col-md-8 col-xs-8 p-l-8 p-t-8"></div>
                     <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
                       <div>
-                        <div class="input-group espacamento {{hasError.empresa_1.hasError}}">
-                          <span class="input-group-addon">Empresa</span>
+                        <div class="input-group espacamento">
+                          <span class="input-group-addon">Outras Rendas</span>
                           <input
                             type="text"
-                            name="empresa_1"
-                            [(ngModel)]="habitacoes.empresa_1"
-                            (focus)="limparCampos('empresa_1')"
-                            class="form-control input-sm"
+                            name="outras_rendas"
+                            id="outras_rendas"
+                            [(ngModel)]="habitacoes.outras_rendas"
+                            (focus)="limparCampos('outras_rendas');"
+                            (blur) = "calcularTotalizador();"
+                            class="form-control input-sm text-right"
                             autocomplete="off">
                         </div>
-                        <p class="text-danger">{{hasError.empresa_1.msg}}</p>
                       </div>
                     </div>
                   </div>
@@ -414,6 +434,7 @@
                             id="bolsa_familia_valor_1"
                             [(ngModel)]="habitacoes.bolsa_familia_valor_1"
                             (focus)="limparCampos('bolsa_familia_valor_1')"
+                            (blur) = "calcularTotalizador();"
                             class="form-control input-sm text-right"
                             autocomplete="off">
                         </div>
@@ -450,6 +471,7 @@
                             id="bpc_valor_1"
                             [(ngModel)]="habitacoes.bpc_valor_1"
                             (focus)="limparCampos('bpc_valor_1')"
+                            (blur) = "calcularTotalizador();"
                             class="form-control input-sm text-right"
                             autocomplete="off">
                         </div>
@@ -653,7 +675,7 @@
                     <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
                       <div>
                         <div class="input-group espacamento {{hasError.viculo_titular_2_com_titular_1.hasError}}">
-                          <span class="input-group-addon">Vínculo com Tiular 2</span>
+                          <span class="input-group-addon">Vínculo com Tiular 1</span>
                           <input
                             type="text"
                             name="viculo_titular_2_com_titular_1"
@@ -686,6 +708,22 @@
 
                     <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
                       <div>
+                        <div class="input-group espacamento {{hasError.empresa_2.hasError}}">
+                          <span class="input-group-addon">Empresa</span>
+                          <input
+                            type="text"
+                            name="empresa_2"
+                            [(ngModel)]="habitacoes.empresa_2"
+                            (focus)="limparCampos('empresa_2')"
+                            class="form-control input-sm"
+                            autocomplete="off">
+                        </div>
+                        <p class="text-danger">{{hasError.empresa_2.msg}}</p>
+                      </div>
+                    </div>
+
+                    <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
+                      <div>
                         <div class="input-group espacamento {{hasError.renda_2.hasError}}">
                           <span class="input-group-addon">Renda</span>
                           <input
@@ -699,22 +737,6 @@
                             autocomplete="off">
                         </div>
                         <p class="text-danger">{{hasError.renda_2.msg}}</p>
-                      </div>
-                    </div>
-
-                    <div class="col-md-4 col-xs-4 p-l-4 p-t-4">
-                      <div>
-                        <div class="input-group espacamento {{hasError.empresa_2.hasError}}">
-                          <span class="input-group-addon">Empresa</span>
-                          <input
-                            type="text"
-                            name="empresa_2"
-                            [(ngModel)]="habitacoes.empresa_2"
-                            (focus)="limparCampos('empresa_2')"
-                            class="form-control input-sm"
-                            autocomplete="off">
-                        </div>
-                        <p class="text-danger">{{hasError.empresa_2.msg}}</p>
                       </div>
                     </div>
                   </div>
@@ -854,6 +876,7 @@
                             id="bolsa_familia_valor_2"
                             [(ngModel)]="habitacoes.bolsa_familia_valor_2"
                             (focus)="limparCampos('bolsa_familia_valor_2')"
+                            (blur) = "calcularTotalizador();"
                             class="form-control input-sm text-right"
                             autocomplete="off">
                         </div>
@@ -890,6 +913,7 @@
                             id="bpc_valor_2"
                             [(ngModel)]="habitacoes.bpc_valor_2"
                             (focus)="limparCampos('bpc_valor_2')"
+                            (blur) = "calcularTotalizador();"
                             class="form-control input-sm text-right"
                             autocomplete="off">
                         </div>
@@ -1544,6 +1568,7 @@
                             <template [ngIf]="!gf.deleted">
                               <td>
                                 <button class="btn btn-danger btn-sm glyphicon glyphicon-remove" (click)="removeItemGrupoFamiliar($event, gf, i)"></button>
+                                <button class="btn btn-primary btn-sm glyphicon glyphicon-pencil" (click)="alterItemGrupoFamiliar($event, gf, i)"></button>
                               </td>
 
                               <td>
